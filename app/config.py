@@ -1,0 +1,14 @@
+import os
+
+POSTGRES_HOST = os.environ['POSTGRES_HOST']
+POSTGRES_USER = os.environ['POSTGRES_USER']
+POSTGRES_PASSWORD = os.environ['POSTGRES_PASSWORD']
+POSTGRES_DB = os.environ['POSTGRES_DB']
+POSTGRES_PORT = os.environ['POSTGRES_PORT']
+
+# POSTGRES_HOST = "127.0.0.1"
+# POSTGRES_USER = "postgres"
+# POSTGRES_PASSWORD = "postgres"
+# POSTGRES_DB = "fastapi"
+# POSTGRES_PORT = 5432
+

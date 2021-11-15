@@ -1,0 +1,34 @@
+version: '3.7'
+services:
+  postgres-fastapi:
+    container_name: postgres-fastapi
+    image: postgres:13
+    restart: always
+    volumes:
+      - ./db-data/:/var/lib/postgresql/data
+    networks:
+      - fastapi-network
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+
+  fastapi-app:
+    container_name: fastapi-app
+    depends_on:
+      - postgres-fastapi
+    image: fastapi-simple-users-api:0.2
+    restart: always
+    networks:
+      - fastapi-network
+    environment:
+      - POSTGRES_HOST=postgres-fastapi
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=fastapi
+      - POSTGRES_PORT=5432
+    ports:
+      - "8000:8000"
+
+networks:
+  fastapi-network:

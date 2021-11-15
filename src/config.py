@@ -1,5 +1,0 @@
-POSTGRES_HOST = "127.0.0.1"
-POSTGRES_USER = "postgres"
-POSTGRES_PASSWORD = "postgres"
-POSTGRES_DB = "postgres"
-POSTGRES_PORT = 5432

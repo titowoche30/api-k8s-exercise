@@ -1,4 +1,5 @@
 from typing import Optional
+from pydantic import BaseModel
 
 
 class ApiUser:
@@ -11,3 +12,11 @@ class ApiUser:
 
     def __str__(self):
         return f'Name: {self.name} login:{self.login} password:{self.password} email: {self.email} id: {self.id}'
+
+
+class ApiUserModel(BaseModel):
+    name: str
+    login: str
+    password: str
+    email: str
+    id: Optional[int] = None
