@@ -43,6 +43,11 @@ $ helm ls
 $ kubens cwoche-api
 ```
 
+## Creating postgres secret
+```shell
+$ kubectl apply -f kubernetes/secret_api.yaml
+```
+
 ## Creating deployment
 ```shell
 $ kubectl apply -f kubernetes/deployment.yaml
