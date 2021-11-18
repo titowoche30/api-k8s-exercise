@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-fastapi
+  namespace: cwoche-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: fastapi
+  template:
+    metadata:
+      labels:
+        app: fastapi
+    spec:
+      containers:
+        - name: fastapi-users-api
+          image: titowoche30/fastapi-simple-users-api:0.2
+          env:
+            - name: POSTGRES_HOST
+              value: turu
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_DB
+              value: fastapi
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgresql-password
+          ports:
+            - containerPort: 8000

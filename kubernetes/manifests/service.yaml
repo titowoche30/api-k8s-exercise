@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-fastapi
+  namespace: cwoche-api
+spec:
+  type: ClusterIP
+  ports:
+      - protocol: TCP
+        name: http-svc
+        port: 8000
+  selector:
+    app: fastapi
+    
+
+
