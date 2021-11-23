@@ -15,10 +15,10 @@ spec:
     spec:
       containers:
         - name: fastapi-users-api
-          image: titowoche30/fastapi-simple-users-api:0.2
+          image: titowoche30/fastapi-simple-users-api:0.5
           env:
             - name: POSTGRES_HOST
-              value: turu
+              value: cwoche-postgres-postgresql.cwoche-database.svc.cluster.local
             - name: POSTGRES_USER
               value: postgres
             - name: POSTGRES_DB
