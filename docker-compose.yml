@@ -17,7 +17,7 @@ services:
     container_name: fastapi-app
     depends_on:
       - postgres-fastapi
-    image: fastapi-simple-users-api:0.3
+    image: fastapi-simple-users-api:0.5
     restart: always
     networks:
       - fastapi-network
