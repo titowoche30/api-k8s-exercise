@@ -45,6 +45,7 @@ $ helm ls
 PostgreSQL can be accessed via port 5432 on the following DNS names from within your cluster:
 
 cwoche-postgres-postgresql.cwoche-database.svc.cluster.local - Read/Write connection
+
 service_name.namespace.svc.cluster.local 
 
 
