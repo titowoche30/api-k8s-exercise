@@ -8,7 +8,7 @@ class Database:
         self.logger = logger
 
     def get_connection(self, database_name='postgres'):
-        self.logger.info(f'[POSTGRES] Openning connection to database {database_name}')
+        self.logger.info(f'[POSTGRES] Opening connection to database {database_name}')
         conn = psycopg2.connect(f"user={POSTGRES_USER} dbname={database_name} password={POSTGRES_PASSWORD} host={POSTGRES_HOST} port={POSTGRES_PORT}")
         conn.autocommit = True
         return conn
