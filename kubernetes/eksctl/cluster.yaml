@@ -1,0 +1,75 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: cwoche-cluster
+  region: us-east-1
+  version: "1.27"
+
+iam:
+  withOIDC: true
+  serviceAccounts:
+    - metadata:
+        name: python-app
+        namespace: cwoche-api
+        attachRoleARN: arn:aws:iam::123:role/already-created-role-for-app
+    - metadata:
+        name: external-dns
+        namespace: kube-system
+        wellKnownPolicies:
+          externalDNS: true
+    - metadata:
+        name: cert-manager
+        namespace: cert-manager
+        wellKnownPolicies:
+          certManager: true
+    - metadata:
+        name: cluster-autoscaler
+        namespace: kube-system
+        labels: { aws-usage: "cluster-ops" }
+        wellKnownPolicies:
+          autoScaler: true
+
+addons:
+- name: aws-ebs-csi-driver
+  wellKnownPolicies: # add IAM and service account
+    ebsCSIController: true
+
+
+iamIdentityMappings:
+  - arn: arn:aws:iam::000000000000:role/myAdminRole
+    groups:
+      - system:masters
+    username: admin
+    noDuplicateARNs: true # prevents shadowing of ARNs
+
+
+vpc:
+  id: "vpc-0909da5b1296112cd"
+  cidr: "10.0.0.0/16"
+  subnets:
+    private:
+      us-east-1a:
+        id: "subnet-05101802199c8fd41"
+      us-east-1b:
+        id: "subnet-0f1ac25d306162b07"
+      us-east-1c:
+        id: "subnet-0b40c4be24c07cfa4"
+  clusterEndpoints:     #api-server
+    privateAccess: true
+    publicAccess: true
+
+
+managedNodeGroups:
+  - name: cwoche-cluster-node-group-1
+    instanceType: c5.xlarge
+    desiredCapacity: 2
+    minSize: 2
+    maxSize: 2
+    ssh:
+      allow: false
+    privateNetworking: true
+    tags:
+      # EC2 tags required for cluster-autoscaler auto-discovery
+      k8s.io/cluster-autoscaler/enabled: "true"
+      k8s.io/cluster-autoscaler/cwoche-cluster: "owned"

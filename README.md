@@ -1,7 +1,7 @@
 # api-k8s-exercise
 A simple Python API using Postgres and K8S.
 
-### Local development
+### Local development of the python app
 
 ```shell
 docker run --name postgres-fastapi --rm -d -p 5432:5432 --env POSTGRES_PASSWORD=postgres postgres:13

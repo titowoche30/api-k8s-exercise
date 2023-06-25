@@ -1,14 +1,18 @@
 # Cluster
-### Creating local
+
+## Creation
+### Using kind
 ```shell
 $ kind create cluster --config kind/kind-nodes-config.yml
 ```
-
-### Setting context
 ```shell
 $ kubectl cluster-info --context kind-kind
 ```
 
+### Using eksctl
+$ 
+
+## Development
 ### Checking cluster
 ```shell
 $ kubectl get nodes
