@@ -3,19 +3,23 @@
 ## Creation
 ### Using kind
 ```shell
-$ kind create cluster --config kind/kind-nodes-config.yml
+$ kind create cluster --config kubernetes/kind/kind-nodes-config.yml
 ```
 ```shell
 $ kubectl cluster-info --context kind-kind
 ```
 
 ### Using eksctl
-$ 
+```shell
+$ eksctl create cluster --config-file=./kubernetes/eksctl/cluster.yaml
+$ aws eks update-kubeconfig --region us-east-1 --name cwoche-cluster --role-arn arn:aws:iam::649165755582:role/EKSUserRole --alias cwoche-cluster --user-alias cwoche-dev-role
+```
+IAM Role definitions on kubernetes/iam
 
 ## Development
 ### Checking cluster
 ```shell
-$ kubectl get nodes
+$ kubectl get nodes -o wide
 ```
 
 ### Creating namespaces
@@ -33,14 +37,14 @@ $ kubens cwoche-database
 
 ### Creating postgres secret
 ```shell
-$ kubectl apply -f kubernetes/manifest/secret_postgres.yaml
+$ kubectl apply -f kubernetes/manifests/secret_postgres.yaml
 ```
 
 
 ### Installing postgres chart
 ```shell
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm show values bitnami/postgres > postgres_values.yml
+$ helm show values bitnami/postgresql > postgres_values.yaml
 - Change the global.postgresql.existingSecret with the name of the secret
 $ helm install -f postgres_values.yml cwoche-postgres bitnami/postgresql
 $ helm ls
@@ -79,7 +83,31 @@ $ kubectl apply -f kubernetes/manifests/service.yaml
 $ kubectl port-forward service/service-fastapi 8000:8000
 ```
 
-### Destroying cluster
+# Extra Components
+
+## Cluster Autoscaler
+
+### Creating components
+```shell
+$ kubectl apply -f kubernetes/manifests/cluster-autoscaler-autodiscover.yaml
+```
+
+## Metrics Server
+
+### Creating components
+```shell
+$ kubectl apply -f kubernetes/manifests/metrics-server-components.yaml
+```
+
+# Destroying cluster
+
+* Delete PVCs. The volume on AWS won't be deleted by the cluster destruction
+
+```shell
+$ eksctl delete cluster --name cwoche-cluster --wait
+```
+
 ```shell
 $ kind delete cluster
 ```
+

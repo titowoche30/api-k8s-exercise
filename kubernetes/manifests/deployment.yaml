@@ -13,6 +13,7 @@ spec:
       labels:
         app: fastapi
     spec:
+      serviceAccountName: python-app
       containers:
         - name: fastapi-users-api
           image: titowoche30/fastapi-simple-users-api:0.5
@@ -28,7 +29,7 @@ spec:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-secret
-                  key: postgresql-password
+                  name: api-postgres-secret
+                  key: password
           ports:
             - containerPort: 8000

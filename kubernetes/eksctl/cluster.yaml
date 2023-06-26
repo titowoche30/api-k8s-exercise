@@ -12,23 +12,24 @@ iam:
     - metadata:
         name: python-app
         namespace: cwoche-api
-        attachRoleARN: arn:aws:iam::123:role/already-created-role-for-app
+      attachPolicyARNs:
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
     - metadata:
         name: external-dns
         namespace: kube-system
-        wellKnownPolicies:
-          externalDNS: true
+      wellKnownPolicies:
+        externalDNS: true
     - metadata:
         name: cert-manager
         namespace: cert-manager
-        wellKnownPolicies:
-          certManager: true
+      wellKnownPolicies:
+        certManager: true
     - metadata:
         name: cluster-autoscaler
         namespace: kube-system
         labels: { aws-usage: "cluster-ops" }
-        wellKnownPolicies:
-          autoScaler: true
+      wellKnownPolicies:
+        autoScaler: true
 
 addons:
 - name: aws-ebs-csi-driver
@@ -37,10 +38,10 @@ addons:
 
 
 iamIdentityMappings:
-  - arn: arn:aws:iam::000000000000:role/myAdminRole
+  - arn: arn:aws:iam::649165755582:role/EKSUserRole
     groups:
       - system:masters
-    username: admin
+    username: cwoche-dev
     noDuplicateARNs: true # prevents shadowing of ARNs
 
 
@@ -64,8 +65,8 @@ managedNodeGroups:
   - name: cwoche-cluster-node-group-1
     instanceType: c5.xlarge
     desiredCapacity: 2
-    minSize: 2
-    maxSize: 2
+    minSize: 1
+    maxSize: 3
     ssh:
       allow: false
     privateNetworking: true

@@ -4,11 +4,11 @@ metadata:
   name: service-fastapi
   namespace: cwoche-api
 spec:
-  type: ClusterIP
+  type: LoadBalancer      # public aws classic load balancer
   selector:
     app: fastapi
   ports:
       - protocol: TCP
         name: http-svc
-        port: 8000
+        port: 80
         targetPort: 8000
