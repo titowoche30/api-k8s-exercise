@@ -15,15 +15,15 @@ iam:
       attachPolicyARNs:
         - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
     - metadata:
-        name: external-dns
+        name: aws-load-balancer-controller
         namespace: kube-system
       wellKnownPolicies:
-        externalDNS: true
+        awsLoadBalancerController: true
     - metadata:
-        name: cert-manager
-        namespace: cert-manager
+        name: external-dns
+        namespace: default
       wellKnownPolicies:
-        certManager: true
+        externalDNS: true
     - metadata:
         name: cluster-autoscaler
         namespace: kube-system
@@ -54,8 +54,6 @@ vpc:
         id: "subnet-05101802199c8fd41"
       us-east-1b:
         id: "subnet-0f1ac25d306162b07"
-      us-east-1c:
-        id: "subnet-0b40c4be24c07cfa4"
   clusterEndpoints:     #api-server
     privateAccess: true
     publicAccess: true

@@ -26,6 +26,7 @@ $ kubectl get nodes -o wide
 ```shell
 $ kubectl create namespace cwoche-api
 $ kubectl create namespace cwoche-database
+$ kubectl create namespace cwoche-nginx
 ```
 
 
@@ -83,6 +84,27 @@ $ kubectl apply -f kubernetes/manifests/service.yaml
 $ kubectl port-forward service/service-fastapi 8000:8000
 ```
 
+# Nginx
+### Switching namespace
+```shell
+$ kubens cwoche-nginx
+```
+
+### Creating deployment
+```shell
+$ kubectl apply -f kubernetes/manifests/deployment-nginx.yaml
+```
+
+### Creating service
+```shell
+$ kubectl apply -f kubernetes/manifests/service-nginx.yaml
+```
+
+### Binding port
+```shell
+$ kubectl port-forward service/nginx 80:80
+```
+
 # Extra Components
 
 ## Cluster Autoscaler
@@ -99,9 +121,31 @@ $ kubectl apply -f kubernetes/manifests/cluster-autoscaler-autodiscover.yaml
 $ kubectl apply -f kubernetes/manifests/metrics-server-components.yaml
 ```
 
+## Ingress - AWS Load Balancer Controller
+
+### Adding helm repo
+```shell
+$ helm repo add eks https://aws.github.io/eks-charts
+```
+
+### Install the TargetGroupBinding CRDs
+```shell
+$ kubectl apply -f kubernetes/manifests/crds.yaml
+```
+
+## Install helm chart
+```shell
+$ helm install -f kubernetes/helm/aws_load_balancer_controller_values.yaml aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system
+```
+
+## External DNS
+```shell
+$ kubectl apply -f kubernetes/manifests/external-dns.yaml
+```
+
 # Destroying cluster
 
-* Delete PVCs. The volume on AWS won't be deleted by the cluster destruction
+* Delete PVCs. The volumes on AWS won't be deleted by the cluster destruction
 
 ```shell
 $ eksctl delete cluster --name cwoche-cluster --wait
