@@ -47,7 +47,7 @@ $ kubectl apply -f kubernetes/manifests/secret_postgres.yaml
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm show values bitnami/postgresql > postgres_values.yaml
 - Change the global.postgresql.existingSecret with the name of the secret
-$ helm install -f postgres_values.yml cwoche-postgres bitnami/postgresql
+$ helm install -f kubernetes/helm/postgres_values.yaml cwoche-postgres bitnami/postgresql
 $ helm ls
 ```
 ### obs: 

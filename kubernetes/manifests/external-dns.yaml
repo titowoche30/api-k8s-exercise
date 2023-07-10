@@ -31,6 +31,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: external-dns
+  namespace: default
   labels:
     app.kubernetes.io/name: external-dns
 spec:
