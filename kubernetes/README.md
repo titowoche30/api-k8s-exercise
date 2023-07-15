@@ -146,6 +146,7 @@ $ kubectl apply -f kubernetes/manifests/external-dns.yaml
 # Destroying cluster
 
 * Delete PVCs. The volumes on AWS won't be deleted by the cluster destruction
+* k get pv,pvc -A
 
 ```shell
 $ eksctl delete cluster --name cwoche-cluster --wait

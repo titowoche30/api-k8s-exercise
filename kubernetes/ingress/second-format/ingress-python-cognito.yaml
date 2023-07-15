@@ -1,0 +1,53 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: python-app-cognito
+  namespace: cwoche-api
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: instance
+    alb.ingress.kubernetes.io/load-balancer-name: python-app-alb-cognito
+    alb.ingress.kubernetes.io/group.name: cwoche-ingress-alb-group-cognito
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/success-codes: '200-400'
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '20'
+    alb.ingress.kubernetes.io/healthy-threshold-count: '2'
+    alb.ingress.kubernetes.io/unhealthy-threshold-count: '3'
+    # For each `listen-ports` object defined an ALB lister is created
+    # For each listener created the rules defined in `spec` apply with some basic caveats
+    # SSL redirect rule is applied only to the HTTP listener.  Cognito's authentication rule
+    # is applied to the HTTPS listener
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    # Authentication type must be cognito
+    alb.ingress.kubernetes.io/auth-type: cognito
+    # Required parameter for ALB/Cognito integration
+    alb.ingress.kubernetes.io/auth-scope: openid
+    # Session timeout on authentication credentials
+    alb.ingress.kubernetes.io/auth-session-timeout: '3600'
+    # Session cookie name
+    alb.ingress.kubernetes.io/auth-session-cookie: AWSELBAuthSessionCookie
+    # Action to take when a request is not authenticated
+    alb.ingress.kubernetes.io/auth-on-unauthenticated-request: authenticate
+    # Cognito's parameters required for creation of authentication rules
+    # The subdomain name only is sufficient for `UserPoolDomain`
+    # e.g. if `FQDN=app.auth.ap-northeast-1.amazoncognito.com` then `UserPoolDomain=app`
+    alb.ingress.kubernetes.io/auth-idp-cognito: '{"UserPoolArn": "arn-here","UserPoolClientId":"id-here","UserPoolDomain":"cwoche"}'
+    # ACM certificate ARN for your TLS domain
+#    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:<region>:<account-id>:certificate/<certificate-id>
+spec:
+  ingressClassName: alb
+  rules:
+    - host: python-app.cwoche.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: service-fastapi
+                port:
+                  name: http-svc
+#                  number: 8000

@@ -65,6 +65,8 @@ managedNodeGroups:
     desiredCapacity: 2
     minSize: 1
     maxSize: 3
+    volumeSize: 30
+    volumeType: gp2
     ssh:
       allow: false
     privateNetworking: true
